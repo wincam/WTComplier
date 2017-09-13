@@ -7,24 +7,27 @@
 cmake_minimum_required(VERSION 2.8) # http://www.cmake.org/cmake/help/cmake-2-8-docs.html#command:cmake_minimum_required
 
 # Sets the name of the project. Additionally this sets the variables <projectName>_BINARY_DIR and <projectName>_SOURCE_DIR to the respective values.
-project ("hello world in wt++")      # http://www.cmake.org/cmake/help/cmake-2-8-docs.html#command:project
+project ("test in wt++")      # http://www.cmake.org/cmake/help/cmake-2-8-docs.html#command:project
+#set(CMAKE_VERBOSE_MAKEFILE ON)
 
 # Other Libraries
-find_package(Boost COMPONENTS system thread signals)
+find_package(Boost COMPONENTS program_options)
 find_library(wt wt)
 find_library(wthttp wthttp)
 
 # This tells cmake that we want to create an executable called 'wtttest' and the source files are in the src directory
 # add the executable
 file(GLOB_RECURSE wttest_SRC
+${PROJECT_SOURCE_DIR}/src/*.C
 ${PROJECT_SOURCE_DIR}/src/*.h
 ${PROJECT_SOURCE_DIR}/src/*.cpp
 ${PROJECT_SOURCE_DIR}/src/*.cxx
-${PROJECT_SOURCE_DIR}/src/*.c
-)
 
+)
 add_executable(wtttest ${wttest_SRC})
+set_target_properties(wtttest PROPERTIES LINKER_LANGUAGE CXX)
 
 target_link_libraries(wtttest
-		      ${Boost_SYSTEM_LIBRARY} ${Boost_THREAD_LIBRARY} ${Boost_SIGNALS_LIBRARY}
-		      wt wthttp)
+          ${Boost_LIBRARIES}
+		      wt wthttp wtdbosqlite3 wtdbo)
+
